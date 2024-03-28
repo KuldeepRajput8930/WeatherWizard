@@ -21,6 +21,7 @@ function App() {
 
   const [weatherData, setWeatherData] = useState(sampleData);
   const [hourData, setHourData] = useState(hourdataSample);
+  const [loading, setLoading] = useState(true);
 
   //--------------------------- search function--------------------------------
 
@@ -31,10 +32,12 @@ function App() {
   //----------------------- weather update function ----------------------------
 
   const weatherUpdate = async (searchCity) => {
+    setLoading(true)
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${searchCity}&units=metric&appid=${WEATHER_API_KEY}`
     let data = await fetch(url);
     let parseData = await data.json();
     setWeatherData(parseData)
+    setLoading(false)
   }
 
   //-----------------------hourly forcast function---------------------------
@@ -44,6 +47,7 @@ function App() {
     let data = await fetch(url);
     let parseData = await data.json();
     setHourData(parseData)
+    setLoading(false)
   }
   useEffect(() => {
     weatherUpdate('delhi');
@@ -51,7 +55,7 @@ function App() {
   }, []);
   return (
     <>
-      <WeatherMain weatherData={weatherData} hourData={hourData} search={search} />
+      <WeatherMain weatherData={weatherData} hourData={hourData} search={search} loading={loading} />
     </>
   )
 }
